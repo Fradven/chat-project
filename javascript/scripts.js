@@ -43,9 +43,9 @@ $("#content-container").on("click", ".submit", () => {
         },
         (data) => {
           if (data.error) {
-            $("body").append(`
+            $("#content-container").append(`
                     <div id="myModal" class="modal-component">
-                        <div class="modal-content bg-dark">
+                        <div class="modal-content bg-warning">
                             <p>${data.error}</p>
                         </div>
                     </div>
@@ -61,12 +61,30 @@ $("#content-container").on("click", ".submit", () => {
 // fetch users
 userView = () => {
   $.post("php/api.php", { action: "list-user" }, (data) => {
-    console.log("enter user ::>"+data)
     $("#content-container").html('');
-    data.users.map(user => {
-        $("#content-container").append(`
-            <button>${user.user}</button>
-        `);
-    })
-  }, "json")
+    $("#content-container").append(`
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Open chat
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="user-dropdown"></div>
+      </div>
+    `);
+
+    data.users.forEach(user => {
+      $("#user-dropdown").append(`<button class="dropdown-item dropdown-users" value="${user.user}">${user.user}</button>`);
+    });
+
+    // Update button text on user selection
+    $(".dropdown-item").click(function() {
+      const selectedUser = $(this).text();
+      $("#dropdownMenuButton").text(selectedUser);
+    });
+  }, "json");
 }
+
+$("#logout").on("click", () => {
+  $.post("php/api.php", { action: "logout" }, (data) => {
+    console.log("kill")
+  })
+})

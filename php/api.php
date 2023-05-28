@@ -17,6 +17,9 @@ switch ($_POST["action"]) {
         }
         break;
 
+    case "send-message":
+        break;
+
     case "list-user":
         require_once './includes/dbo.inc.php';
         require_once './includes/function.inc.php';

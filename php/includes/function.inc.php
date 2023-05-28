@@ -38,3 +38,17 @@ function fetchUser($link)
         echo json_encode(array("users" => $users), true);
     }
 }
+
+function messageHandler($receiver, $message, $action, $link)
+{
+    switch($action)
+    {
+        case "send-message":
+            $req = $link->prepare("INSERT INTO messages (sender_id, conversation_id, message) VALUES (?, ?, ?) WHERE ");
+            $req->execute([$_SESSION["ID_user"], $receiver, $message]);
+           break;
+        case "fetch-message":
+                
+            break;
+    }
+}
